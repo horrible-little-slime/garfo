@@ -1,8 +1,8 @@
 {
-  "name": "kol-js-starter",
-  "version": "1.0.0",
-  "description": "Example package for KoLmafia TypeScript scripts.",
-  "main": "KoLmafia/scripts/kol-js-starter/main-script-name.js",
+  "name": "garfo",
+  "version": "0.0.0",
+  "description": "Why do they call it garfo when you of in the adventures of out hot farm the pill?",
+  "main": "KoLmafia/scripts/garfo/garfo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run build:types && npm run build:js",
@@ -34,12 +34,9 @@
     "kolmafia": ">=1.2.0",
     "libram": ">=0.3.0"
   },
-  "author": "Captain Scotch",
+  "author": "Phreddrickkv2 Arbuckle",
   "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/docrostov/kol-js-starter.git"
-  },
+  "repository": "https://github.com/horrible-little-slime/garfo.git",
   "keywords": [
     "KoLMafia",
     "JS",
