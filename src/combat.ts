@@ -57,7 +57,7 @@ export default class Macro extends LibramMacro {
         .skill($skill`Saucegeyser`)
         .repeat()
     )
-      .attack()
+      .skill($skill`Weapon of the Pastalord`)
       .repeat();
   }
 
