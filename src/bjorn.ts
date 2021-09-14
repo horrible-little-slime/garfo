@@ -1,11 +1,13 @@
 import { myFamiliar } from "kolmafia";
 import { $familiar, $item, $items, get, getSaleValue, have } from "libram";
+import { NumericModifier } from "libram/dist/modifierTypes";
 
 export type BjornedFamiliar = {
   familiar: Familiar;
   meatVal: () => number;
   probability: number;
   dropPredicate?: () => boolean;
+  modifier?: { modifier: NumericModifier; value: number };
 };
 
 const bjornFams: BjornedFamiliar[] = [
@@ -67,6 +69,8 @@ const bjornFams: BjornedFamiliar[] = [
     familiar: $familiar`Li'l Xenomorph`,
     meatVal: () => getSaleValue($item`lunar isotope`),
     probability: 0.05,
+    dropPredicate: undefined,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Pottery Barn Owl`,
@@ -84,6 +88,7 @@ const bjornFams: BjornedFamiliar[] = [
     meatVal: () => getSaleValue($item`glob of melted wax`),
     probability: 1,
     dropPredicate: () => get("_optimisticCandleDropsCrown") < 3,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Adventurous Spelunker`,
@@ -93,6 +98,7 @@ const bjornFams: BjornedFamiliar[] = [
       ),
     probability: 1,
     dropPredicate: () => get("_oreDropsCrown") < 6,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Twitching Space Critter`,
@@ -135,11 +141,15 @@ const bjornFams: BjornedFamiliar[] = [
     familiar: $familiar`Reassembled Blackbird`,
     meatVal: () => getSaleValue($item`blackberry`),
     probability: 1,
+    dropPredicate: undefined,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Reconstituted Crow`,
     meatVal: () => getSaleValue($item`blackberry`),
     probability: 1,
+    dropPredicate: undefined,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Hunchbacked Minion`,
@@ -250,21 +260,29 @@ const bjornFams: BjornedFamiliar[] = [
     familiar: $familiar`Rockin' Robin`,
     meatVal: () => 60,
     probability: 1,
+    dropPredicate: undefined,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Feral Kobold`,
     meatVal: () => 30,
     probability: 1,
+    dropPredicate: undefined,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 15 },
   },
   {
     familiar: $familiar`Oily Woim`,
     meatVal: () => 30,
     probability: 1,
+    dropPredicate: undefined,
+    modifier: { modifier: "Item Drop" as NumericModifier, value: 10 },
   },
   {
     familiar: $familiar`Misshapen Animal Skeleton`,
     meatVal: () => 30,
     probability: 1,
+    dropPredicate: undefined,
+    modifier: { modifier: "Familiar Weight" as NumericModifier, value: 5 },
   },
   {
     familiar: $familiar`Frozen Gravy Fairy`,
