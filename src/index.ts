@@ -75,7 +75,10 @@ export function main(): void {
     mpAutoRecoveryTarget: 0.5,
   });
 
-  while (turnsEstimate() > itemAmount($item`Map to Safety Shelter Grimace Prime`)) {
+  while (
+    turnsEstimate() > itemAmount($item`Map to Safety Shelter Grimace Prime`) &&
+    myInebriety() <= inebrietyLimit()
+  ) {
     if (
       get("_voteFreeFights") < 3 &&
       have($item`"I Voted!" sticker`) &&
@@ -149,5 +152,24 @@ export function main(): void {
     if (haveEffect($effect`Transpondent`) < myAdventures()) use($item`transporter transponder`);
   }
 
+  if (
+    itemAmount($item`distention pill`) <
+    itemAmount($item`synthetic dog hair pill`) +
+      itemAmount($item`Map to Safety Shelter Grimace Prime`)
+  ) {
+    setChoice(536, 1);
+    while (
+      itemAmount($item`distention pill`) <
+        itemAmount($item`synthetic dog hair pill`) +
+          itemAmount($item`Map to Safety Shelter Grimace Prime`) &&
+      myAdventures() > 0
+    ) {
+      use($item`Map to Safety Shelter Grimace Prime`);
+    }
+  }
+  setChoice(536, 2);
+  while (have($item`Map to Safety Shelter Grimace Prime`) && myAdventures() > 0) {
+    use($item`Map to Safety Shelter Grimace Prime`);
+  }
   PropertyManager.resetAll();
 }
