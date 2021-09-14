@@ -59,7 +59,7 @@ export function main(): void {
     );
   }
 
-  while (turnsEstimate() < itemAmount($item`Map to Safety Shelter Grimace Prime`)) {
+  while (turnsEstimate() > itemAmount($item`Map to Safety Shelter Grimace Prime`)) {
     if (
       get("_voteFreeFights") < 3 &&
       have($item`"I Voted!" sticker`) &&
