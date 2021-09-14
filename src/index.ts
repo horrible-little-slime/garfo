@@ -7,6 +7,7 @@ import {
   myAdventures,
   myInebriety,
   numericModifier,
+  print,
   totalTurnsPlayed,
   use,
   useFamiliar,
@@ -170,6 +171,12 @@ export function main(): void {
   setChoice(536, 2);
   while (have($item`Map to Safety Shelter Grimace Prime`) && myAdventures() > 0) {
     use($item`Map to Safety Shelter Grimace Prime`);
+  }
+
+  if (myAdventures() > 0) {
+    print("Ran out of maps!", "red");
+  } else if (have($item`Map to Safety Shelter Grimace Prime`)) {
+    print("Ran out of turns!", "red");
   }
   PropertyManager.resetAll();
 }
