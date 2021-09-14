@@ -41,6 +41,7 @@ export function freeFightOutfit(...requirements: Requirement[]): void {
   const freeFightReq = new Requirement(["14.52 Familiar Weight"], {
     forceEquip: forceEquips,
     bonusEquip: bonusEquips,
+    preventEquip: $items`Buddy Bjorn, Crown of Thrones`.filter((equip) => equip !== bjornalike),
   });
   Requirement.maximize(compiledReqs, freeFightReq);
   if (haveEquipped($item`Buddy Bjorn`)) bjornifyFamiliar(bjornChoice.familiar);
@@ -72,6 +73,7 @@ export function embezzlerOutfit(...requirements: Requirement[]): void {
     new Requirement(["10.25 Meat Drop"], {
       forceEquip: forceEquips,
       bonusEquip: bonusEquips,
+      preventEquip: $items`Buddy Bjorn, Crown of Thrones`.filter((equip) => equip !== bjornalike),
     })
   );
   if (haveEquipped($item`Buddy Bjorn`)) bjornifyFamiliar(bjornChoice.familiar);
@@ -117,7 +119,10 @@ export function elfOutfit(): void {
         [$item`Mr. Screege's spectacles`, 180],
         [$item`garbage sticker`, 100],
       ]),
-      preventEquip: $items`broken champagne bottle`,
+      preventEquip: [
+        $item`broken champagne bottle`,
+        ...$items`Buddy Bjorn, Crown of Thrones`.filter((equip) => equip !== bjornalike),
+      ],
     }
   ).maximize();
 
