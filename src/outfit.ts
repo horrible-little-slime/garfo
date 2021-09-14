@@ -1,11 +1,83 @@
-import { runChoice, toSlot, totalTurnsPlayed, visitUrl } from "kolmafia";
-import { $familiar, $item, $items, $slot, get, getSaleValue, have, Requirement } from "libram";
+import {
+  bjornifyFamiliar,
+  enthroneFamiliar,
+  haveEquipped,
+  runChoice,
+  toSlot,
+  totalTurnsPlayed,
+  visitUrl,
+} from "kolmafia";
+import { $familiar, $item, $items, $slot, get, have, Requirement } from "libram";
 import { pickBjorn } from "./bjorn";
 import { BonusEquipMode, itemFamiliar } from "./lib";
 
-export function freeFightOutfit() {}
-export function embezzlerOutfit() {}
-export function elfOutfit() {
+export function freeFightOutfit(...requirements: Requirement[]): void {
+  const compiledReqs = Requirement.merge(requirements);
+  const forceEquips: Item[] = $items`Loathing Legion helicopter`;
+  if (
+    have($item`protonic accelerator pack`) &&
+    forceEquips.every((item) => toSlot(item) !== $slot`back`) &&
+    get("questPAGhost") === "unstarted" &&
+    get("nextParanormalActivity") <= totalTurnsPlayed()
+  )
+    forceEquips.push($item`protonic accelerator pack`);
+
+  const bjornChoice = pickBjorn(BonusEquipMode.FREE);
+  const bjornalike =
+    forceEquips.some((equip) => toSlot(equip) === $slot`back`) ||
+    (compiledReqs.maximizeOptions.forceEquip &&
+      compiledReqs.maximizeOptions.forceEquip.some((equip) => toSlot(equip) === $slot`back`))
+      ? $item`Crown of Thrones`
+      : $item`Buddy Bjorn`;
+
+  const bonusEquips = new Map<Item, number>([
+    [bjornalike, bjornChoice.probability * bjornChoice.meatVal()],
+    [$item`lucky gold ring`, 400],
+    [$item`Mr. Cheeng's spectacles`, 250],
+    [$item`pantogram pants`, get("_pantogramModifier").includes("Drops Items") ? 100 : 0],
+    [$item`Mr. Screege's spectacles`, 180],
+  ]);
+
+  const freeFightReq = new Requirement(["14.52 Familiar Weight"], {
+    forceEquip: forceEquips,
+    bonusEquip: bonusEquips,
+  });
+  Requirement.maximize(compiledReqs, freeFightReq);
+  if (haveEquipped($item`Buddy Bjorn`)) bjornifyFamiliar(bjornChoice.familiar);
+  if (haveEquipped($item`Crown of Thrones`)) enthroneFamiliar(bjornChoice.familiar);
+}
+export function embezzlerOutfit(...requirements: Requirement[]): void {
+  const compiledReqs = Requirement.merge(requirements);
+
+  const forceEquips: Item[] = [];
+
+  const bjornChoice = pickBjorn(BonusEquipMode.EMBEZZLER);
+  const bjornalike =
+    forceEquips.some((equip) => toSlot(equip) === $slot`back`) ||
+    (compiledReqs.maximizeOptions.forceEquip &&
+      compiledReqs.maximizeOptions.forceEquip.some((equip) => toSlot(equip) === $slot`back`))
+      ? $item`Crown of Thrones`
+      : $item`Buddy Bjorn`;
+
+  const bonusEquips = new Map<Item, number>([
+    [bjornalike, bjornChoice.probability * bjornChoice.meatVal()],
+    [$item`lucky gold ring`, 400],
+    [$item`Mr. Cheeng's spectacles`, 250],
+    [$item`pantogram pants`, get("_pantogramModifier").includes("Drops Items") ? 100 : 0],
+    [$item`Mr. Screege's spectacles`, 180],
+    [$item`mafia thumb ring`, 0.04 * get("valueOfAdventure")],
+  ]);
+  Requirement.maximize(
+    compiledReqs,
+    new Requirement(["10.25 Meat Drop"], {
+      forceEquip: forceEquips,
+      bonusEquip: bonusEquips,
+    })
+  );
+  if (haveEquipped($item`Buddy Bjorn`)) bjornifyFamiliar(bjornChoice.familiar);
+  if (haveEquipped($item`Crown of Thrones`)) enthroneFamiliar(bjornChoice.familiar);
+}
+export function elfOutfit(): void {
   const forceEquips: Item[] = $items`mafia thumb ring`;
   if (
     have($item`protonic accelerator pack`) &&
@@ -24,6 +96,9 @@ export function elfOutfit() {
   }
 
   const bjornChoice = pickBjorn(BonusEquipMode.ELF);
+  const bjornalike = forceEquips.some((equip) => toSlot(equip) === $slot`back`)
+    ? $item`Crown of Thrones`
+    : $item`Buddy Bjorn`;
 
   new Requirement(
     [
@@ -35,38 +110,16 @@ export function elfOutfit() {
     {
       forceEquip: forceEquips,
       bonusEquip: new Map<Item, number>([
-        [$item`Buddy Bjorn`, bjornChoice.probability * bjornChoice.meatVal()],
+        [bjornalike, bjornChoice.probability * bjornChoice.meatVal()],
         [$item`lucky gold ring`, 400],
         [$item`Mr. Cheeng's spectacles`, 250],
         [$item`pantogram pants`, get("_pantogramModifier").includes("Drops Items") ? 100 : 0],
         [$item`Mr. Screege's spectacles`, 180],
-        ...snowSuit(),
-        ...mayflowerBouquet(),
         [$item`garbage sticker`, 100],
       ]),
     }
-  );
-}
+  ).maximize();
 
-function snowSuit() {
-  if (!have($item`Snow Suit`) || get("_carrotNoseDrops") >= 3) return new Map<Item, number>([]);
-
-  return new Map<Item, number>([[$item`Snow Suit`, getSaleValue($item`carrot nose`) / 10]]);
-}
-
-function mayflowerBouquet() {
-  // +40% meat drop 12.5% of the time (effectively 5%)
-  // Drops flowers 50% of the time, wiki says 5-10 a day.
-  // Theorized that flower drop rate drops off but no info on wiki.
-  // During testing I got 4 drops then the 5th took like 40 more adventures
-  // so let's just assume rate drops by 11% with a min of 1% ¯\_(ツ)_/¯
-
-  if (!have($item`Mayflower bouquet`) || get("_mayflowerDrops") >= 10)
-    return new Map<Item, number>([]);
-
-  const averageFlowerValue =
-    getSaleValue(
-      ...$items`tin magnolia, upsy daisy, lesser grodulated violet, half-orchid, begpwnia`
-    ) * Math.max(0.01, 0.5 - get("_mayflowerDrops") * 0.11);
-  return new Map<Item, number>([[$item`Mayflower bouquet`, averageFlowerValue]]);
+  if (haveEquipped($item`Buddy Bjorn`)) bjornifyFamiliar(bjornChoice.familiar);
+  if (haveEquipped($item`Crown of Thrones`)) enthroneFamiliar(bjornChoice.familiar);
 }
