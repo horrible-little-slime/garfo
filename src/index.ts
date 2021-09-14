@@ -125,11 +125,11 @@ export function main(): void {
         () => getKramcoWandererChance() >= 1
       );
     }
+
+    useFamiliar(itemFamiliar());
+    elfOutfit();
+    advMacroAA($location`Domed City of Grimacia`, Macro.kill());
+
+    if (haveEffect($effect`Transpondent`) < myAdventures()) use($item`transporter transponder`);
   }
-
-  useFamiliar(itemFamiliar());
-  elfOutfit();
-  advMacroAA($location`Domed City of Grimacia`, Macro.kill());
-
-  if (haveEffect($effect`Transpondent`) < myAdventures()) use($item`transporter transponder`);
 }
