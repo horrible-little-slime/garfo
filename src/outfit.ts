@@ -117,6 +117,7 @@ export function elfOutfit(): void {
         [$item`Mr. Screege's spectacles`, 180],
         [$item`garbage sticker`, 100],
       ]),
+      preventEquip: $items`broken champagne bottle`,
     }
   ).maximize();
 

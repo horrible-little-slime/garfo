@@ -9,6 +9,7 @@ import {
   retrieveItem,
   runChoice,
   use,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
 import { canAdv } from "canadv.ash";
@@ -217,6 +218,7 @@ export function itemFamiliar(): Familiar {
   if (!cache.itemFamiliar || cache.itemFamiliar === $familiar`Steam-Powered Cheerleader`) {
     if (have($familiar`Reagnimated Gnome`)) {
       if (!have($item`gnomish housemaid's kgnee`)) {
+        useFamiliar($familiar`Reagnimated Gnome`);
         visitUrl("arena.php");
         runChoice(4);
       }
