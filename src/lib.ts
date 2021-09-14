@@ -241,3 +241,9 @@ export const PropertyManager = new PropertiesManager();
 export function setChoice(choice: number, value: number): void {
   PropertyManager.setChoices({ [choice]: value });
 }
+
+export enum BonusEquipMode {
+  EMBEZZLER,
+  FREE,
+  ELF,
+}
