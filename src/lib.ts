@@ -20,6 +20,7 @@ import {
   $location,
   $locations,
   get,
+  getSaleValue,
   Guzzlr,
   have,
   Macro,
@@ -216,24 +217,39 @@ export function meatFamiliar(): Familiar {
 
 export function itemFamiliar(): Familiar {
   if (!cache.itemFamiliar || cache.itemFamiliar === $familiar`Steam-Powered Cheerleader`) {
-    if (have($familiar`Reagnimated Gnome`)) {
-      if (!have($item`gnomish housemaid's kgnee`)) {
-        useFamiliar($familiar`Reagnimated Gnome`);
-        visitUrl("arena.php");
-        runChoice(4);
-      }
-      if (have($item`gnomish housemaid's kgnee`)) {
-        cache.itemFamiliar = $familiar`Reagnimated Gnome`;
-        return cache.itemFamiliar;
-      }
+    if (have($familiar`Reagnimated Gnome`) && !have($item`gnomish housemaid's kgnee`)) {
+      useFamiliar($familiar`Reagnimated Gnome`);
+      visitUrl("arena.php");
+      runChoice(4);
     }
-    const bestFairies = Familiar.all()
-      .filter(have)
-      .sort((a, b) => fairyMultiplier(b) - fairyMultiplier(a));
-    const bestFairyMult = fairyMultiplier(bestFairies[0]);
-    cache.itemFamiliar = bestFairies
-      .filter((familiar) => fairyMultiplier(familiar) === bestFairyMult)
-      .sort((a, b) => leprechaunMultiplier(b) - leprechaunMultiplier(a))[0];
+    const fairy: Familiar | undefined = [
+      {
+        familiar: $familiar`Obtuse Angel`,
+        value: 0.02 * getSaleValue($item`time's arrow`),
+      },
+      {
+        familiar: $familiar`Reagnimated Gnome`,
+        value: (1000 / Math.pow(1000 - 120, 2)) * get("valueOfAdventure"),
+      },
+      {
+        familiar: $familiar`Jumpsuited Hound Dog`,
+        value: 0,
+      },
+    ]
+      .filter((famAndValue) => have(famAndValue.familiar))
+      .sort((a, b) => b.value - a.value)[0].familiar;
+
+    if (fairy) {
+      cache.itemFamiliar = fairy;
+    } else {
+      const bestFairies = Familiar.all()
+        .filter(have)
+        .sort((a, b) => fairyMultiplier(b) - fairyMultiplier(a));
+      const bestFairyMult = fairyMultiplier(bestFairies[0]);
+      cache.itemFamiliar = bestFairies
+        .filter((familiar) => fairyMultiplier(familiar) === bestFairyMult)
+        .sort((a, b) => leprechaunMultiplier(b) - leprechaunMultiplier(a))[0];
+    }
   }
   return cache.itemFamiliar;
 }
