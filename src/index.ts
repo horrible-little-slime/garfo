@@ -28,6 +28,7 @@ import {
   determineDraggableZoneAndEnsureAccess,
   itemFamiliar,
   meatFamiliar,
+  PropertyManager,
   setChoice,
 } from "./lib";
 import { elfOutfit, embezzlerOutfit, freeFightOutfit } from "./outfit";
@@ -132,4 +133,6 @@ export function main(): void {
 
     if (haveEffect($effect`Transpondent`) < myAdventures()) use($item`transporter transponder`);
   }
+
+  PropertyManager.resetAll();
 }
