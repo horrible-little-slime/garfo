@@ -65,11 +65,14 @@ export function main(): void {
     battleAction: "custom combat script",
     dontStopForCounters: true,
     maximizerFoldables: true,
-    hpAutoRecoveryTarget: 1.0,
     trackVoteMonster: "free",
     autoSatisfyWithMall: true,
     autoSatisfyWithNPCs: true,
     autoSatisfyWithStorage: true,
+    hpAutoRecovery: 0.35,
+    hpAutoRecoveryTarget: 1.0,
+    mpAutoRecovery: 0.25,
+    mpAutoRecoveryTarget: 0.5,
   });
 
   while (turnsEstimate() > itemAmount($item`Map to Safety Shelter Grimace Prime`)) {
