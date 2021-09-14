@@ -60,6 +60,18 @@ export function main(): void {
     );
   }
 
+  PropertyManager.set({
+    customCombatScript: "twiddle",
+    battleAction: "custom combat script",
+    dontStopForCounters: true,
+    maximizerFoldables: true,
+    hpAutoRecoveryTarget: 1.0,
+    trackVoteMonster: "free",
+    autoSatisfyWithMall: true,
+    autoSatisfyWithNPCs: true,
+    autoSatisfyWithStorage: true,
+  });
+
   while (turnsEstimate() > itemAmount($item`Map to Safety Shelter Grimace Prime`)) {
     if (
       get("_voteFreeFights") < 3 &&
